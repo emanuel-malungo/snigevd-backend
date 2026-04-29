@@ -11,3 +11,175 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id              String   @id @default(uuid())
+  fullName        String
+  email           String   @unique
+  phone           String?
+  passwordHash    String
+  isActive        Boolean  @default(true)
+
+  role            Role
+  status          UserStatus @default(PENDING)
+
+  studentProfile  StudentProfile?
+  school          School?
+  institutionUser InstitutionUser?
+  userPermissions UserPermission[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+}
+
+enum Role {
+  STUDENT
+  SCHOOL_ADMIN
+  MIREX
+  MED
+  GPEL
+  EMBASSY
+  DME
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  BLOCKED
+}
+
+model School {
+  id                   String   @id @default(uuid())
+  schoolName           String
+  schoolNumber         String   @unique
+  decree               String
+  startYear            Int
+  educationLevel       String
+  street               String
+  municipality         String
+  province             String
+  contact              String
+  institutionalEmail   String   @unique
+  passwordHash         String
+  status               SchoolStatus @default(PENDING)
+  isActive             Boolean  @default(true)
+
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  students             StudentProfile[]
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  deletedAt            DateTime?
+}
+
+enum SchoolStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model StudentProfile {
+  id        String   @id @default(uuid())
+  biNumber  String   @unique
+  isActive  Boolean  @default(true)
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+model Institution {
+  id        String   @id @default(uuid())
+  name      InstitutionType
+  level     InstitutionLevel
+  isActive  Boolean  @default(true)
+
+  users     InstitutionUser[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+enum InstitutionType {
+  MIREX
+  MED
+  GPEL
+  EMBASSY
+  DME
+}
+
+enum InstitutionLevel {
+  NATIONAL
+  PROVINCIAL
+  MUNICIPAL
+  LOCAL
+}
+
+model InstitutionUser {
+  id              String   @id @default(uuid())
+  position        String?
+  department      String?
+  isActive        Boolean  @default(true)
+
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  institutionId   String
+  institution     Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  module      String
+  action      String
+  isActive    Boolean  @default(true)
+
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RolePermission {
+  id            String   @id @default(uuid())
+  role          Role
+  permissionId  String
+  permission    Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+
+  @@unique([role, permissionId])
+}
+
+model UserPermission {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  permissionId  String
+  permission    Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, permissionId])
+}
+

@@ -1,0 +1,77 @@
+# Dependências
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vs/
+.vscode-test
+.history/
+
+# Arquivos de compilação e build
+dist/
+build/
+.next/
+out/
+generated/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+lerna-debug.log*
+
+# Arquivos temporários
+tmp/
+temp/
+*.tmp
+
+# Cache
+.cache/
+.eslintcache
+
+# Dependências de desenvolvimento
+.npm
+.yarn/cache
+.yarn/unplugged
+
+# Arquivos de teste
+coverage/
+.nyc_output/
+
+# Arquivos de backup
+*.bak
+*.backup
+*.swp
+
+# Diversos
+.DS_Store
+/generated/prisma

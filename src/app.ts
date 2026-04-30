@@ -6,6 +6,8 @@ import userRoutes from './routes/users.routes.js';
 import schoolRoutes from './routes/schools.routes.js';
 import studentRoutes from './routes/students.routes.js';
 import institutionRoutes from './routes/institutions.routes.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
+import permissionRoutes from './routes/permissions.routes.js';
 
 const app = express();
 
@@ -24,6 +26,9 @@ app.use('/users', userRoutes);
 app.use('/schools', schoolRoutes);
 app.use('/students', studentRoutes);
 app.use('/institutions', institutionRoutes);
+app.use('/dashboard', dashboardRoutes);
+app.use('/permissions', permissionRoutes);
+
 
 
 

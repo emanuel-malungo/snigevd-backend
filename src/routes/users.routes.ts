@@ -8,16 +8,42 @@ const userController = new UserController();
 
 /**
  * @swagger
- * tags:
- *   name: Utilizadores
- *   description: Gestão de utilizadores e perfis
- */
-
-/**
- * @swagger
+ * components:
+ *   schemas:
+ *     InstitutionalUserRequest:
+ *       type: object
+ *       required: [fullName, email, password, role, institutionId]
+ *       properties:
+ *         fullName: { type: string, example: "Bernardo Costa" }
+ *         email: { type: string, format: email, example: "b.costa@mirex.gov.ao" }
+ *         password: { type: string, minLength: 6, example: "admin@2024" }
+ *         role: { type: string, enum: [MIREX, MED, GPEL, EMBASSY, DME], example: "MIREX" }
+ *         institutionId: { type: string, format: uuid, example: "550e8400-e29b-41d4-a716-446655440000" }
+ *         position: { type: string, example: "Chefe de Departamento" }
+ *         department: { type: string, example: "Equivalências" }
+ * 
+ *     UpdateUserStatusRequest:
+ *       type: object
+ *       required: [status]
+ *       properties:
+ *         status: { type: string, enum: [ACTIVE, PENDING, BLOCKED], example: "BLOCKED" }
+ * 
+ *     UpdateUserRoleRequest:
+ *       type: object
+ *       required: [role]
+ *       properties:
+ *         role: { type: string, enum: [STUDENT, SCHOOL_ADMIN, MIREX, MED, GPEL, EMBASSY, DME, SUPER_ADMIN], example: "SUPER_ADMIN" }
+ * 
+ *     ResetPasswordRequest:
+ *       type: object
+ *       required: [newPassword]
+ *       properties:
+ *         newPassword: { type: string, minLength: 6, example: "novaSenha123!" }
+ * 
  * /users:
  *   get:
  *     summary: Listar todos os utilizadores
+ *     description: Retorna uma lista de todos os utilizadores do sistema com filtros opcionais.
  *     tags: [Utilizadores]
  *     security:
  *       - bearerAuth: []
@@ -26,18 +52,16 @@ const userController = new UserController();
  *         name: role
  *         schema:
  *           type: string
- *         description: Filtrar por perfil (ex: STUDENT, SCHOOL_ADMIN, MIREX)
+ *           enum: [STUDENT, SCHOOL_ADMIN, MIREX, MED, GPEL, EMBASSY, DME, SUPER_ADMIN]
+ *         description: Filtrar por perfil
  *     responses:
  *       200:
- *         description: Lista de utilizadores obtida com sucesso
- */
-router.get('/', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED, Role.MIREX]), userController.listUsers);
-
-/**
- * @swagger
+ *         description: Lista de utilizadores
+ * 
  * /users/institutional:
  *   post:
- *     summary: Criar utilizador institucional (MIREX, MED, GPEL, etc)
+ *     summary: Criar utilizador institucional
+ *     description: Cria uma conta para funcionários de entidades governamentais.
  *     tags: [Utilizadores]
  *     security:
  *       - bearerAuth: []
@@ -46,27 +70,14 @@ router.get('/', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED, Role
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [fullName, email, password, role, institutionId]
- *             properties:
- *               fullName: { type: string }
- *               email: { type: string, format: email }
- *               password: { type: string, minLength: 6 }
- *               role: { type: string, enum: [MIREX, MED, GPEL, EMBASSY, DME] }
- *               institutionId: { type: string, format: uuid }
- *               position: { type: string }
- *               department: { type: string }
+ *             $ref: '#/components/schemas/InstitutionalUserRequest'
  *     responses:
  *       201:
- *         description: Utilizador criado com sucesso
- */
-router.post('/institutional', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), userController.createInstitutionalUser);
-
-/**
- * @swagger
+ *         description: Criado com sucesso
+ * 
  * /users/{id}:
  *   get:
- *     summary: Obter detalhes de um utilizador
+ *     summary: Obter detalhes do utilizador
  *     tags: [Utilizadores]
  *     security:
  *       - bearerAuth: []
@@ -77,12 +88,8 @@ router.post('/institutional', authMiddleware, roleMiddleware([Role.SUPER_ADMIN])
  *         schema: { type: string, format: uuid }
  *     responses:
  *       200:
- *         description: Detalhes do utilizador
- */
-router.get('/:id', authMiddleware, userController.getUserDetails);
-
-/**
- * @swagger
+ *         description: Detalhes do utilizador e suas relações
+ * 
  * /users/{id}/status:
  *   patch:
  *     summary: Ativar ou bloquear conta
@@ -99,22 +106,14 @@ router.get('/:id', authMiddleware, userController.getUserDetails);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [status]
- *             properties:
- *               status: { type: string, enum: [ACTIVE, PENDING, BLOCKED] }
+ *             $ref: '#/components/schemas/UpdateUserStatusRequest'
  *     responses:
  *       200:
- *         description: Estado atualizado com sucesso
- */
-router.patch('/:id/status', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), userController.updateStatus);
-
-/**
- * @swagger
+ *         description: Estado atualizado
+ * 
  * /users/{id}/role:
  *   patch:
- *     summary: Alterar perfil (role) do utilizador
- *     description: Apenas Super Admins podem alterar perfis de outros utilizadores.
+ *     summary: Alterar perfil (role)
  *     tags: [Utilizadores]
  *     security:
  *       - bearerAuth: []
@@ -128,21 +127,14 @@ router.patch('/:id/status', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Ro
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [role]
- *             properties:
- *               role: { type: string, enum: [STUDENT, SCHOOL_ADMIN, MIREX, MED, GPEL, EMBASSY, DME, SUPER_ADMIN] }
+ *             $ref: '#/components/schemas/UpdateUserRoleRequest'
  *     responses:
  *       200:
- *         description: Perfil atualizado com sucesso
- */
-router.patch('/:id/role', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), userController.updateRole);
-
-/**
- * @swagger
+ *         description: Perfil alterado
+ * 
  * /users/{id}/reset-password:
  *   post:
- *     summary: Redefinir senha de um utilizador
+ *     summary: Redefinir senha
  *     tags: [Utilizadores]
  *     security:
  *       - bearerAuth: []
@@ -156,14 +148,17 @@ router.patch('/:id/role', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), us
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [newPassword]
- *             properties:
- *               newPassword: { type: string, minLength: 6 }
+ *             $ref: '#/components/schemas/ResetPasswordRequest'
  *     responses:
  *       200:
- *         description: Senha redefinida com sucesso
+ *         description: Senha redefinida
  */
+router.get('/', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED, Role.MIREX]), userController.listUsers);
+router.post('/institutional', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), userController.createInstitutionalUser);
+router.get('/:id', authMiddleware, userController.getUserDetails);
+router.patch('/:id/status', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), userController.updateStatus);
+router.patch('/:id/role', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), userController.updateRole);
 router.post('/:id/reset-password', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), userController.resetPassword);
+
 
 export default router;

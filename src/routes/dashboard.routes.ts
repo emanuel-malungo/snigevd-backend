@@ -8,12 +8,30 @@ const dashboardController = new DashboardController();
 
 /**
  * @swagger
- * tags:
- *   name: Dashboard
- *   description: Estatísticas e métricas globais
+ * /dashboard/stats:
+ *   get:
+ *     summary: Obter estatísticas globais
+ *     description: Retorna contadores agregados e dados para gráficos (utilizadores por perfil, escolas por estado).
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estatísticas carregadas com sucesso
+ * 
+ * /dashboard/activity:
+ *   get:
+ *     summary: Obter atividade recente
+ *     description: Retorna as últimas escolas e utilizadores registados no sistema.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de atividade recente
  */
-
 router.get('/stats', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), dashboardController.getStats);
 router.get('/activity', authMiddleware, roleMiddleware([Role.SUPER_ADMIN]), dashboardController.getActivity);
+
 
 export default router;

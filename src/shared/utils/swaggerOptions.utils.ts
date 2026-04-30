@@ -13,8 +13,27 @@ const swaggerOptions: swaggerJSDoc.Options = {
         url: "http://localhost:4000",
         description: "Servidor de Desenvolvimento Local"
       }
-    ]
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    tags: [
+      { name: 'Autenticação', description: 'Endpoints para login e registo' },
+      { name: 'Dashboard', description: 'Estatísticas e monitorização global' },
+      { name: 'Utilizadores', description: 'Gestão de perfis e acesso' },
+      { name: 'Escolas', description: 'Controlo administrativo de instituições de ensino' },
+      { name: 'Estudantes', description: 'Supervisão global de alunos' },
+      { name: 'Instituições', description: 'Gestão de entidades governamentais' },
+      { name: 'Permissões', description: 'Gestão de ACL e permissões granulares' },
+    ],
   },
+
   apis: [
     "./src/routes/**/*.ts",
     "./src/routes/**/*.js"

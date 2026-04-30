@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { Request } from 'express';
-import rateLimit from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit';
 import bcrypt from 'bcryptjs';
 
 // Extrai o IP real do cliente (considerando proxies)

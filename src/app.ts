@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { swaggerDocs } from './config/swagger.config.js';
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/users.routes.js';
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.get("/", async (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+
 
 
 

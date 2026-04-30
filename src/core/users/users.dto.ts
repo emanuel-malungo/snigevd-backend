@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role, UserStatus, InstitutionType, InstitutionLevel } from '../../../generated/prisma/index.js';
+import { Role, UserStatus } from '../../../generated/prisma/index.js';
 
 export const createInstitutionalUserSchema = z.object({
     fullName: z.string().min(3, 'Nome completo deve ter no mínimo 3 caracteres'),
@@ -7,7 +7,7 @@ export const createInstitutionalUserSchema = z.object({
     phone: z.string().optional(),
     password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
     role: z.nativeEnum(Role),
-    institutionId: z.string().uuid('ID da instituição inválido'),
+    institutionId: z.string().min(1, 'ID da instituição inválido'),
     position: z.string().optional(),
     department: z.string().optional(),
 });

@@ -21,13 +21,13 @@ app.get("/", async (req, res) => {
     res.json({ status: "OK", message: "Mpamba API is running perfectly! 🚀" });
 });
 
-app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/schools', schoolRoutes);
-app.use('/students', studentRoutes);
-app.use('/institutions', institutionRoutes);
-app.use('/dashboard', dashboardRoutes);
-app.use('/permissions', permissionRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/schools', schoolRoutes);
+app.use('/api/students', studentRoutes);
+app.use('/api/institutions', institutionRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/permissions', permissionRoutes);
 
 
 

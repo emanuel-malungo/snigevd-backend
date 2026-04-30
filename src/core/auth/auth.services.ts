@@ -80,7 +80,7 @@ export class AuthService {
     /**
      * Register a new School
      */
-    async registerSchool(input: SchoolRegisterInput): Promise<AuthUser> {
+    async registerSchool(input: SchoolRegisterInput): Promise<LoginResponse> {
         const existingUser = await prisma.user.findUnique({
             where: { email: input.email }
         });
@@ -121,7 +121,7 @@ export class AuthService {
             }
         });
 
-        return {
+        const authUser: AuthUser = {
             id: user.id,
             fullName: user.fullName,
             email: user.email,
@@ -129,12 +129,27 @@ export class AuthService {
             status: user.status,
             schoolId: user.school?.id
         };
+
+        const payload: JwtPayload = {
+            sub: user.id,
+            email: user.email,
+            role: user.role
+        };
+
+        const accessToken = JwtStrategy.sign(payload);
+        const refreshToken = RefreshStrategy.sign({ sub: user.id });
+
+        return {
+            accessToken,
+            refreshToken,
+            user: authUser
+        };
     }
 
     /**
      * Register a new Student
      */
-    async registerStudent(input: StudentRegisterInput): Promise<AuthUser> {
+    async registerStudent(input: StudentRegisterInput): Promise<LoginResponse> {
         const existingUser = await prisma.user.findUnique({
             where: { email: input.email }
         });
@@ -165,12 +180,27 @@ export class AuthService {
             }
         });
 
-        return {
+        const authUser: AuthUser = {
             id: user.id,
             fullName: user.fullName,
             email: user.email,
             role: user.role,
             status: user.status
+        };
+
+        const payload: JwtPayload = {
+            sub: user.id,
+            email: user.email,
+            role: user.role
+        };
+
+        const accessToken = JwtStrategy.sign(payload);
+        const refreshToken = RefreshStrategy.sign({ sub: user.id });
+
+        return {
+            accessToken,
+            refreshToken,
+            user: authUser
         };
     }
 

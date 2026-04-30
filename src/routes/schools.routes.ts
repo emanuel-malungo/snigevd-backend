@@ -68,6 +68,7 @@ const schoolController = new SchoolController();
  *       200:
  *         description: Estado atualizado
  */
+router.get('/public', schoolController.listPublic);
 router.get('/', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), schoolController.listSchools);
 router.get('/:id', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), schoolController.getSchoolDetails);
 router.patch('/:id/status', authMiddleware, roleMiddleware([Role.SUPER_ADMIN, Role.MED]), schoolController.updateStatus);

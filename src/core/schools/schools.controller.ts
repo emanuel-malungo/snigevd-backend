@@ -23,6 +23,22 @@ export class SchoolController {
         }
     }
 
+    async listPublic(req: Request, res: Response) {
+        try {
+            const schools = await schoolService.listPublicSchools();
+            
+            return res.status(200).json({
+                status: 'success',
+                data: schools
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                status: 'error',
+                message: error.message || 'Erro ao listar escolas públicas'
+            });
+        }
+    }
+
     async updateStatus(req: Request, res: Response) {
         try {
             const id = req.params.id as string;

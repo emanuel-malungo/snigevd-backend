@@ -20,6 +20,20 @@ export class SchoolManagementService {
     }
 
     /**
+     * List only approved schools for public consumption
+     */
+    async listPublicSchools() {
+        return await prisma.school.findMany({
+            where: { status: SchoolStatus.APPROVED },
+            select: {
+                id: true,
+                schoolName: true
+            },
+            orderBy: { schoolName: 'asc' }
+        });
+    }
+
+    /**
      * Update school status (Approve, Reject, Suspend)
      */
     async updateStatus(schoolId: string, input: UpdateSchoolStatusInput) {

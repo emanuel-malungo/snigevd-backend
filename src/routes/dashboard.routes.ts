@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { DashboardController } from '../core/dashboard/dashboard.controller.js';
 import { authMiddleware, roleMiddleware } from '../shared/middlewares/auth.middleware.js';
-import { Role } from '../../generated/prisma/index.js';
+import { Role } from '../../generated/prisma/client.js';
 
 const router = Router();
 const dashboardController = new DashboardController();

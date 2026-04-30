@@ -3,6 +3,8 @@ import express from 'express';
 import { swaggerDocs } from './config/swagger.config.js';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/users.routes.js';
+import schoolRoutes from './routes/schools.routes.js';
+import studentRoutes from './routes/students.routes.js';
 
 const app = express();
 
@@ -18,6 +20,9 @@ app.get("/", async (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/schools', schoolRoutes);
+app.use('/students', studentRoutes);
+
 
 
 

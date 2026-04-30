@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { swaggerDocs } from './config/swagger.config.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
@@ -13,6 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", async (req, res) => {
     res.json({ status: "OK", message: "Mpamba API is running perfectly! 🚀" });
 });
+
+app.use('/auth', authRoutes);
+
 
 
 // Swagger Documentation

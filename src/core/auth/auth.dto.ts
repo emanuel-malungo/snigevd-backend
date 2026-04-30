@@ -47,7 +47,7 @@ export const studentRegisterSchema = z.object({
 	password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
 	phone: z.string().optional(),
 	biNumber: z.string().min(1, 'Número do BI é obrigatório'),
-	schoolId: z.string().uuid('ID da escola inválido'),
+	schoolId: z.string().min(1, 'ID da escola inválido'),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

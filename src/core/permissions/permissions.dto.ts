@@ -10,12 +10,12 @@ export const createPermissionSchema = z.object({
 
 export const assignRolePermissionSchema = z.object({
     role: z.nativeEnum(Role),
-    permissionId: z.string().uuid(),
+    permissionId: z.string().min(1),
 });
 
 export const assignUserPermissionSchema = z.object({
-    userId: z.string().uuid(),
-    permissionId: z.string().uuid(),
+    userId: z.string().min(1),
+    permissionId: z.string().min(1),
 });
 
 export type CreatePermissionInput = z.infer<typeof createPermissionSchema>;

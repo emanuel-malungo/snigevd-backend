@@ -8,7 +8,7 @@ export const createInstitutionSchema = z.object({
 });
 
 export const assignUserToInstitutionSchema = z.object({
-    userId: z.string().uuid(),
+    userId: z.string().min(1),
     position: z.string().optional(),
     department: z.string().optional(),
 });

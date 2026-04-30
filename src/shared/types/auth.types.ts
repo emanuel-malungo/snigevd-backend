@@ -1,4 +1,4 @@
-import type { Role, UserStatus } from '../../../generated/prisma/index.js';
+import type { Role, UserStatus } from '../../../generated/prisma/client.js';
 
 
 /**

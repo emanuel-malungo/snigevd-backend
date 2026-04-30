@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role } from '../../../generated/prisma/index.js';
+import { Role } from '../../../generated/prisma/client.js';
 
 
 // Login request schema

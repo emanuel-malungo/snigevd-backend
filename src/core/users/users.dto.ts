@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role, UserStatus } from '../../../generated/prisma/index.js';
+import { Role, UserStatus } from '../../../generated/prisma/client.js';
 
 export const createInstitutionalUserSchema = z.object({
     fullName: z.string().min(3, 'Nome completo deve ter no mínimo 3 caracteres'),

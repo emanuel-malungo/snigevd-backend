@@ -4,14 +4,14 @@ import { InstitutionType, InstitutionLevel } from '../../../generated/prisma/ind
 export const createInstitutionSchema = z.object({
     name: z.nativeEnum(InstitutionType),
     level: z.nativeEnum(InstitutionLevel),
+    isActive: z.boolean().default(true),
 });
 
 export const assignUserToInstitutionSchema = z.object({
-    userId: z.string().uuid('ID do utilizador inválido'),
-    institutionId: z.string().uuid('ID da instituição inválido'),
+    userId: z.string().uuid(),
     position: z.string().optional(),
     department: z.string().optional(),
 });
 
 export type CreateInstitutionInput = z.infer<typeof createInstitutionSchema>;
-export type AssignUserInput = z.infer<typeof assignUserToInstitutionSchema>;
+export type AssignUserToInstitutionInput = z.infer<typeof assignUserToInstitutionSchema>;
